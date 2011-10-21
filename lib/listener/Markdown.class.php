@@ -54,11 +54,14 @@ class Doctrine_Template_Listener_Markdown extends Doctrine_Record_Listener
   {
     $parser = new MarkdownExtra_Parser();
     $object = $event->getInvoker();
-    foreach ($this->_options['fields'] as $parsedField => $markdownField) 
+    foreach ($this->_options['fields'] as $htmlField => $markdownField) 
     {
       if (array_key_exists($markdownField, $object->getModified()))
       {
-        $object[$parsedField] = $parser->transform($object[$markdownField]);
+        // allows editing of $htmlField directly, otherwise it's cleared
+        if (!($object[$markdownField] == '' && $object->isNew())) {
+          $object[$htmlField] = $parser->transform($object[$markdownField]);
+        }
       }
     }
   }
