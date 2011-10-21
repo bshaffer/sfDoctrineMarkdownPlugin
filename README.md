@@ -76,8 +76,8 @@ Optionally specify the column for the html to be persisted like so:
 
 Helper functions include:
 
- * _markdown_preview_link(*$field*, *$linkName* = 'Preview')_
+ * _markdown_preview_link(_*$field*_, _*$linkName* = 'Preview'_)_
     - Takes the name of your markdown field (you must be outputing this in a symfony form)
     and provides a link which, when clicked opens a popup window with the value rendered as markdown 
- * _markdown(*$text*)_
+ * _markdown(_*$text*_)_
     - Render text as markdown
