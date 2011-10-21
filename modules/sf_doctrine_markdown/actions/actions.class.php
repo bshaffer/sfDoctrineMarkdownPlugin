@@ -1,9 +1,9 @@
 <?php
 
 /**
-* csMarkdown Actions
+* sf_doctrine_markdown Actions
 */
-class csMarkdownActions extends sfActions
+class sf_doctrine_markdownActions extends sfActions
 {
   public function executePreview(sfWebRequest $request)
   {
