@@ -82,13 +82,12 @@ Helper functions include:
     You have to define an elemnent with ID `markdown_preview` (or pass in a different ID) for
     where the preview is shown.
 
-
-    <div id="markdown-tab" class="markdown">
-        <?php echo $form['body_markdown']->renderError() ?>
-        <?php echo $form['body_markdown']->render() ?>
-        <p><?php echo markdown_preview_link($form['body_markdown']->renderName()) ?></p>
-        <div id="markdown_preview">&nbsp;</div>
-    </div>
+        <div id="markdown-tab" class="markdown">
+            <?php echo $form['body_markdown']->renderError() ?>
+            <?php echo $form['body_markdown']->render() ?>
+            <p><?php echo markdown_preview_link($form['body_markdown']->renderName()) ?></p>
+            <div id="markdown_preview">&nbsp;</div>
+        </div>
 
  * _markdown($text)_
     - Render text as markdown
