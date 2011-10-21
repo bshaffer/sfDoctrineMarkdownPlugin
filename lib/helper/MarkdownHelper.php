@@ -1,6 +1,6 @@
 <?php
 
-function markdown_preview_link($field, $linkName = 'Preview') {
+function markdown_preview_link($field, $linkName = 'Preview', $previewId = 'markdown_preview') {
     use_helper('JavascriptBase');
     use_stylesheet('/sfDoctrineMarkdownPlugin/css/markdown.css');
     $submit = content_tag('a',$linkName, array('href' => '#', 'onclick' => 'javascript:markdown_preview(this);return false'));
@@ -8,10 +8,10 @@ function markdown_preview_link($field, $linkName = 'Preview') {
     $js = javascript_tag(sprintf(<<<EOF
       function markdown_preview (e) {
         var markdown_text = $('form *[name=%s]').val();
-        $('#markdown_preview').load('%s', { 'markdown': markdown_text }, function() { $(this).append("<a href='#' onclick='$(\"#markdown_preview\").hide()'>hide</a>") } ).css('display', 'block');
+        $('#%s').load('%s', { 'markdown': markdown_text }, function() { $(this).append("<a href='#' onclick='$(\"#markdown_preview\").hide()'>hide</a>") } ).css('display', 'block');
       }
 EOF
-, $field, url_for('@markdown_preview')));
+, $field, $previewId, url_for('@markdown_preview')));
 
     return $submit.$js;
 }

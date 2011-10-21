@@ -1,5 +1,5 @@
 markdown_preview:
     url: /sfDoctrineMarkdown/preview
-    params: { module: sfDoctrineMarkdown, action: preview }
+    params: { module: sf_doctrine_markdown, action: preview }
     requirements:
         sf_method: [POST]

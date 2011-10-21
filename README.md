@@ -76,14 +76,17 @@ Optionally specify the column for the html to be persisted like so:
 
 Helper functions include:
 
- * _markdown_preview_link($field, $linkName = 'Preview')_
+ * _markdown_preview_link($field, $linkName = 'Preview', $previewId = 'markdown_preview')_
     - Takes the name of your markdown field (you must be outputing this in a symfony form)
-    and provides a link which, when clicked opens a popup window with the value rendered as markdown 
+    and provides a link which, when clicked opens a popup window with the value rendered as markdown.
+    You have to define an elemnent with ID `markdown_preview` (or pass in a different ID) for
+    where the preview is shown.
    
       <div id="markdown-tab" class="markdown">
         <?php echo $form['body_markdown']->renderError() ?>
         <?php echo $form['body_markdown']->render() ?>
-        <p><?php echo markdown_preview_link('body_markdown') ?></p>
+        <p><?php echo markdown_preview_link($form['body_markdown']->getName()) ?></p>
+        <div id="markdown_preview">&nbsp;</div>
       </div>
 
  * _markdown($text)_
