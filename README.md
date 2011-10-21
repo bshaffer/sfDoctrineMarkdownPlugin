@@ -79,5 +79,12 @@ Helper functions include:
  * _markdown_preview_link($field, $linkName = 'Preview')_
     - Takes the name of your markdown field (you must be outputing this in a symfony form)
     and provides a link which, when clicked opens a popup window with the value rendered as markdown 
+   
+      <div id="markdown-tab" class="markdown">
+        <?php echo $form['body_markdown']->renderError() ?>
+        <?php echo $form['body_markdown']->render() ?>
+        <p><?php echo markdown_preview_link('body_markdown') ?></p>
+      </div>
+
  * _markdown($text)_
     - Render text as markdown
