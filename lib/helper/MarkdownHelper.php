@@ -1,33 +1,40 @@
 <?php
 
 function markdown_preview_link($field, $linkName = 'Preview', $previewId = 'markdown_preview') {
-    use_helper('JavascriptBase');
     use_stylesheet('/sfDoctrineMarkdownPlugin/css/markdown.css');
-    $submit = content_tag('a',$linkName, array('href' => '#', 'onclick' => 'javascript:markdown_preview(this);return false'));
+    $submit = content_tag('a',$linkName, array('href' => '#', 'onclick' => sprintf('javascript:markdown_preview_%s(this);return false', $previewId)));
   
+    $js = markdown_preview_function($field, $previewId);
+        
+    return $submit.$js;
+}
+
+function markdown_preview_function($field, $previewId = 'markdown_preview') {
+    use_helper('JavascriptBase');
     $js = javascript_tag(sprintf(<<<EOF
-      function markdown_preview (e) {
+      function markdown_preview_%s (e) {
         var markdown_text = $('form *[name=%s]').val();
-        $('#%s').load('%s', { 'markdown': markdown_text }, function() { $(this).append("<a href='#' onclick='$(\"#markdown_preview\").hide()'>hide</a>") } ).css('display', 'block');
+        $('#%s').load('%s', { 'markdown': markdown_text }, function() { $(this).append("<a class=\"markdown-hide\" href='#' onclick='$(\"#markdown_preview\").hide()'>hide</a>") } );
       }
 EOF
-, $field, $previewId, url_for('@markdown_preview')));
+, $previewId, $field, $previewId, url_for('@markdown_preview')));
 
-    return $submit.$js;
+    return $js;
 }
 
 function markdown_preview(){
   return content_tag('div', image_tag('/sfDoctrineMarkdownPlugin/images/loader.gif'), array('id' => 'markdown_preview'));
 }
 
-function markdown($text) {
+// prevents conflicts with other libraries including markdown
+function parse_as_markdown($text) {
 #
 # Initialize the parser and return the result of its transform method.
 #
 	# Setup static parser variable.
 	static $parser;
 	if (!isset($parser)) {
-		$parser_class = MARKDOWN_PARSER_CLASS;
+		$parser_class = sfConfig::get('app_sfDoctrineMarkdownPlugin_parser_class', 'Markdown_Parser');
 		$parser = new $parser_class;
 	}
 
@@ -127,52 +134,5 @@ if (isset($wp_version)) {
 	function mdwp_show_tags($text) {
 		global $mdwp_hidden_tags, $mdwp_placeholders;
 		return str_replace($mdwp_placeholders, $mdwp_hidden_tags, $text);
-	}
-}
-
-
-### bBlog Plugin Info ###
-
-function identify_modifier_markdown() {
-	return array(
-		'name' => 'markdown',
-		'type' => 'modifier',
-		'nicename' => 'PHP Markdown Extra',
-		'description' => 'A text-to-HTML conversion tool for web writers',
-		'authors' => 'Michel Fortin and John Gruber',
-		'licence' => 'GPL',
-		'version' => MARKDOWNEXTRA_VERSION,
-		'help' => '<a href="http://daringfireball.net/projects/markdown/syntax">Markdown syntax</a> allows you to write using an easy-to-read, easy-to-write plain text format. Based on the original Perl version by <a href="http://daringfireball.net/">John Gruber</a>. <a href="http://www.michelf.com/projects/php-markdown/">More...</a>',
-		);
-}
-
-
-### Smarty Modifier Interface ###
-
-function smarty_modifier_markdown($text) {
-	return Markdown($text);
-}
-
-
-### Textile Compatibility Mode ###
-
-# Rename this file to "classTextile.php" and it can replace Textile everywhere.
-
-if (strcasecmp(substr(__FILE__, -16), "classTextile.php") == 0) {
-	# Try to include PHP SmartyPants. Should be in the same directory.
-	@include_once 'smartypants.php';
-	# Fake Textile class. It calls Markdown instead.
-	class Textile {
-		function TextileThis($text, $lite='', $encode='') {
-			if ($lite == '' && $encode == '')    $text = Markdown($text);
-			if (function_exists('SmartyPants'))  $text = SmartyPants($text);
-			return $text;
-		}
-		# Fake restricted version: restrictions are not supported for now.
-		function TextileRestricted($text, $lite='', $noimage='') {
-			return $this->TextileThis($text, $lite);
-		}
-		# Workaround to ensure compatibility with TextPattern 4.0.3.
-		function blockLite($text) { return $text; }
 	}
 }
