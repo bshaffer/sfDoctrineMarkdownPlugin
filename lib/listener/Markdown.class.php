@@ -39,7 +39,10 @@ class Doctrine_Template_Listener_Markdown extends Doctrine_Record_Listener
     $object = $event->getInvoker();
     foreach ($this->_options['fields'] as $parsedField => $markdownField) 
     {
-      $object[$parsedField] = $parser->transform($object[$markdownField]);
+      // allows editing of $htmlField directly, otherwise it's cleared
+      if ($object[$markdownField] != '') {
+        $object[$parsedField] = $parser->transform($object[$markdownField]);
+      }
     }
   }
 
