@@ -34,7 +34,7 @@ function parse_as_markdown($text) {
 	# Setup static parser variable.
 	static $parser;
 	if (!isset($parser)) {
-		$parser_class = sfConfig::get('app_sfDoctrineMarkdownPlugin_parser_class', 'Markdown_Parser');
+		$parser_class = sfConfig::get('app_sfDoctrineMarkdownPlugin_parser_class', 'sfMarkdownParser');
 		$parser = new $parser_class;
 	}
 

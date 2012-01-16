@@ -35,7 +35,7 @@ class Doctrine_Template_Listener_Markdown extends Doctrine_Record_Listener
    */
   public function preInsert(Doctrine_Event $event)
   {
-    $parser = new MarkdownExtra_Parser();
+    $parser = $this->getMarkdownParser();
     $object = $event->getInvoker();
     foreach ($this->_options['fields'] as $parsedField => $markdownField) 
     {
@@ -55,7 +55,7 @@ class Doctrine_Template_Listener_Markdown extends Doctrine_Record_Listener
    */
   public function preUpdate(Doctrine_Event $event)
   {
-    $parser = new MarkdownExtra_Parser();
+    $parser = $this->getMarkdownParser();
     $object = $event->getInvoker();
     foreach ($this->_options['fields'] as $htmlField => $markdownField) 
     {
@@ -67,5 +67,11 @@ class Doctrine_Template_Listener_Markdown extends Doctrine_Record_Listener
         }
       }
     }
+  }
+  
+  private function getMarkdownParser()
+  {
+    $class  = sfConfig::get('app_sfDoctrineMarkdownPlugin_parser_class', 'sfMarkdownParser');
+    return new $class();
   }
 }
