@@ -1,3 +1,5 @@
 all:
   sfDoctrineMarkdownPlugin:
     parser_class: 'sfMarkdownParser'
+    no_markup:    true
+    no_entities:  true
